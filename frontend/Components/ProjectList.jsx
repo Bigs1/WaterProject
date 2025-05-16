@@ -4,12 +4,15 @@ import Project from "../types/Project"
 function ProjectList(){
 
     const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
+    const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
 
     useEffect(() => {//goes and grabs the data when we need to. Only looks for changes in the dom, not the server
     const fetchProjects = async () => {
-        const response = await fetch('https://localhost:5000/Water/AllProjects'); //goes and fetches the table
+        const response = await fetch(
+            `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}` //using ` (on the tilda key) will allow us to grab the variable (indicated by the $ in the link) from our page size we selected and pass it to the server
+        ); //goes and fetches the table. the "?" indicates additional information such as page size
         const data = await response.json(); //returns the data in the .json
-        console.log("Fetched data:", data); // <-- Add this line
+        console.log("Fetched data:", data); //log the fetch data for debugging purposes
         const projectObjects = data.map(
             (item) =>
                 new Project(
@@ -24,9 +27,8 @@ function ProjectList(){
         );
         setProjects(projectObjects);
     };
-
     fetchProjects();
-}, []);
+}, [pageSize]);
 
     return (
       <>
@@ -64,7 +66,7 @@ function ProjectList(){
         <div>
           <label>
             Results per page:
-            <select>
+            <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
