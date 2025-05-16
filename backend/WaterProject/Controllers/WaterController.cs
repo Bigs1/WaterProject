@@ -15,7 +15,10 @@ namespace WaterProject.Controllers
         [HttpGet("AllProjects")]//route, is routing
         public IEnumerable<Project> GetProjects() //goes to the database
         {
-            return _waterContext.Projects.ToList(); //gets all the projects and returns it to a list
+            //var list = _waterContext.Projects.ToList(); //gets all the projects and returns it to a list
+            //var list = _waterContext.Projects.Take(5).ToList(); //gets the first 5 projects 
+            var list = _waterContext.Projects.Skip(5).Take(3).ToList();
+            return list;
         }
 
         [HttpGet("FunctionalProjects")]
