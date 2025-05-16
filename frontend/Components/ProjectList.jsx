@@ -28,7 +28,7 @@ function ProjectList(){
         setProjects(projectObjects);
     };
     fetchProjects();
-}, [pageSize]);
+}, [pageSize]); //[pageSize] updates as we change the page size selection box
 
     return (
       <>
