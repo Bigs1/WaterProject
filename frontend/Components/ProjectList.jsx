@@ -16,7 +16,7 @@ function ProjectList(){
         ); //goes and fetches the table. the "?" indicates additional information such as page size
         const data = await response.json(); //returns the data in the .json
         console.log("Fetched data:", data); //log the fetch data for debugging purposes
-        const projectObjects = data.map(
+        const projectObjects = data.projects.map( //this maps out our array of projects to display
             (item) =>
                 new Project(
                     item.projectId,
@@ -28,9 +28,9 @@ function ProjectList(){
                     item.projectFunctionalityStatus
                 )
         );
-        setProjects(projectObjects.projects); //setting our projects list
-        setTotalItems(projectObjects.totalNumProjects);  //getting our total number of projects
-        setTotalPages(Math.ceil(totalItems/pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
+        setProjects(projectObjects); //setting our projects list to display
+        setTotalItems(data.totalNumProjects);  //getting our total number of projects
+        setTotalPages(Math.ceil(data.totalNumProjects/pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
     };
     fetchProjects();
 }, [pageSize, pageNum]); //[pageSize] & [pageNum] updates as we change the page size selection box
@@ -68,6 +68,17 @@ function ProjectList(){
             </div>
           </div>
         ))}
+
+        <button>Previous</button>
+
+        {
+          [...Array(totalPages)].map((_,i) =>(
+            <button key = {i + 1} onClick={() => setPageNum(i+1)}>
+              {i+1}
+            </button>
+        ))}
+
+        <button>Next</button>
         <div>
           <label>
             Results per page:
@@ -76,12 +87,6 @@ function ProjectList(){
               <option value="10">10</option>
               <option value="20">20</option>
             </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Page Number:
-
           </label>
         </div>
       </>
