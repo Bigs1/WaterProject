@@ -6,6 +6,8 @@ function ProjectList(){
     const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
     const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
     const [pageNum, setPageNum] = useState(1); //set default pagenumber to 1
+    const [totalItems, setTotalItems] = useState(0); //total items default is 0
+    const [totalPages, setTotalPages] = useState(0); //total number of pages
 
     useEffect(() => {//goes and grabs the data when we need to. Only looks for changes in the dom, not the server
     const fetchProjects = async () => {
@@ -26,7 +28,9 @@ function ProjectList(){
                     item.projectFunctionalityStatus
                 )
         );
-        setProjects(projectObjects);
+        setProjects(projectObjects.projects); //setting our projects list
+        setTotalItems(projectObjects.totalNumProjects);  //getting our total number of projects
+        setTotalPages(Math.ceil(totalItems/pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
     };
     fetchProjects();
 }, [pageSize, pageNum]); //[pageSize] & [pageNum] updates as we change the page size selection box

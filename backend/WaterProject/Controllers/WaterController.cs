@@ -43,7 +43,7 @@ namespace WaterProject.Controllers
              * return Ok(projData);
              */
 
-            var someObject = new //creating a new object to return via this constructor
+            var someObject = new //creating a new object to return via this constructor to build a new model
             {
                 Projects = list,
                 TotalNumProjects = totalNumProjects
