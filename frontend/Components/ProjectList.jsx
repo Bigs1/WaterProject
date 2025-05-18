@@ -33,7 +33,7 @@ function ProjectList(){
         setTotalPages(Math.ceil(data.totalNumProjects/pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
     };
     fetchProjects();
-}, [pageSize, pageNum]); //[pageSize] & [pageNum] updates as we change the page size selection box
+}, [pageSize, pageNum, totalItems]); //[pageSize] & [pageNum] updates as we change the page size selection box
 
     return (
       <>
