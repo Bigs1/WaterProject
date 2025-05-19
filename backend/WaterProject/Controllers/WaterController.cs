@@ -52,11 +52,14 @@ namespace WaterProject.Controllers
             return Ok(someObject); //the Ok is a 200 status saying that the object was returned ok which allows us to pass 2 objects of different types to whatever is calling the API
         }
 
-        [HttpGet("FunctionalProjects")]
-        public IEnumerable<Project> GetFunctionalProjects()
+        [HttpGet("GetProjectTypes")]
+        public IActionResult GetProjectTypes()
         {
-            var something = _waterContext.Projects.Where(p => p.ProjectFunctionalityStatus == "Functional").ToList(); //Gets all projects that are listed as Functional
-            return something;
+           var projectTypes = _waterContext.Projects
+                .Select(p => p.ProjectType)
+                .Distinct()
+                .ToList();
+           return Ok(projectTypes);
         }
     }
 }
