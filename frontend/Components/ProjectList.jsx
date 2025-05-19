@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Project from "../types/Project";
 
-function ProjectList() {
+function ProjectList({selectedCategories}) {
   const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
   const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
   const [pageNum, setPageNum] = useState(1); //set default pagenumber to 1
@@ -11,8 +11,10 @@ function ProjectList() {
   useEffect(() => {
     //goes and grabs the data when we need to. Only looks for changes in the dom, not the server
     const fetchProjects = async () => {
+      const categoryParams = selectedCategories.map((cat)=>`projectTypes=${encodeURIComponent(cat)}`).join('&');//encodeURIComponent makes sure our data is put together correctly
       const response = await fetch(
-        `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}` //using ` (on the tilda key) will allow us to grab the variable (indicated by the $ in the link) from our page size we selected and pass it to the server
+        `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}${selectedCategories.length ? `&${categoryParams}`:``}` //using ` (on the tilda key) will allow us to grab the variable (indicated by the $ in the link) from our page size we selected and pass it to the server, 
+                                                                                                                                                       //if we have selected categories, append the categoryParameters to the end, else leave it blank (add nothing)
       ); //goes and fetches the table. the "?" indicates additional information such as page size
       const data = await response.json(); //returns the data in the .json
       console.log("Fetched data:", data); //log the fetch data for debugging purposes
@@ -34,7 +36,7 @@ function ProjectList() {
       setTotalPages(Math.ceil(data.totalNumProjects / pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
     };
     fetchProjects();
-  }, [pageSize, pageNum, totalItems]); //[pageSize] & [pageNum] updates as we change the page size selection box
+  }, [pageSize, pageNum, totalItems, selectedCategories]); //[pageSize] & [pageNum] updates as we change the page size selection box
 
   return (
     <>
