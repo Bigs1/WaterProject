@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Project from "../types/Project";
+import Project from "../../types/Project";
 
 function ProjectList({selectedCategories}) {
   const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
