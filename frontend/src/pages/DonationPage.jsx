@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../Components/Header";
 import { useCart } from "../Context/CartContext"; //gives access to cart operations in the CartContext file
