@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import Project from "../../types/Project";
+import { useNavigate } from "react-router-dom";
 
-function ProjectList({selectedCategories}) {
+function ProjectList({ selectedCategories }) {
   const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
   const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
   const [pageNum, setPageNum] = useState(1); //set default pagenumber to 1
   const [totalItems, setTotalItems] = useState(0); //total items default is 0
   const [totalPages, setTotalPages] = useState(0); //total number of pages
+  const navigate = useNavigate(); //imported from react router dom to change pages
 
   useEffect(() => {
     //goes and grabs the data when we need to. Only looks for changes in the dom, not the server
     const fetchProjects = async () => {
-      const categoryParams = selectedCategories.map((cat)=>`projectTypes=${encodeURIComponent(cat)}`).join('&');//encodeURIComponent makes sure our data is put together correctly
+      const categoryParams = selectedCategories
+        .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
+        .join("&"); //encodeURIComponent makes sure our data is put together correctly
       const response = await fetch(
-        `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}${selectedCategories.length ? `&${categoryParams}`:``}` //using ` (on the tilda key) will allow us to grab the variable (indicated by the $ in the link) from our page size we selected and pass it to the server, 
-                                                                                                                                                       //if we have selected categories, append the categoryParameters to the end, else leave it blank (add nothing)
+        `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ``}` //using ` (on the tilda key) will allow us to grab the variable (indicated by the $ in the link) from our page size we selected and pass it to the server,
+        //if we have selected categories, append the categoryParameters to the end, else leave it blank (add nothing)
       ); //goes and fetches the table. the "?" indicates additional information such as page size
       const data = await response.json(); //returns the data in the .json
       console.log("Fetched data:", data); //log the fetch data for debugging purposes
@@ -66,6 +70,12 @@ function ProjectList({selectedCategories}) {
                 {p.projectFunctionalityStatus}
               </li>
             </ul>
+            <button
+              className="btn btn-success"
+              onClick={() => navigate(`/donation/${p.projectName}`)}
+            >
+              Donate
+            </button>
           </div>
         </div>
       ))}

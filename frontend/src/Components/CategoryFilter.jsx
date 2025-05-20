@@ -12,7 +12,7 @@ function CategoryFilter({selectedCategories, setSelectedCategories}) { //recievi
           `https://localhost:5000/Water/GetProjectTypes`
         );
         const data = await response.json(); //returns the data in the .json
-        console.timeLog('Fetched categories: ', data); //log the categories we obtained
+        console.log('Fetched categories: ', data); //log the categories we obtained
         setCategories(data); //set our categories equal to the data that we returned
       } catch {
         console.error("Error fetching the categories", error); //prints out the error in the console
