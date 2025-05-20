@@ -3,6 +3,7 @@ import ProjectList from "../Components/ProjectList";
 import CategoryFilter from "../Components/CategoryFilter";
 import Header from "../Components/Header";
 import "./ProjectPage.css";
+import CartSummary from "../Components/CartSummary";
 
 function ProjectsPage() {
   const [count, setCount] = useState(0);
@@ -10,6 +11,7 @@ function ProjectsPage() {
   return (
     <>
       <div className="container mt-4">
+        <CartSummary/>
         <Header />
       </div>
       <div className="row">

@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, useContext, createContext } from "react";
 
 // The context is created with `undefined` as its default value.
 // The context will be used to pass cart data and functions down to any component that subscribes to it.
@@ -18,16 +18,18 @@ export const CartProvider = ({ children }) => {
 
       // Create a new cart with the updated item.
       // If the item already exists, we map over the previous cart and update the donation amount.
-      const updatedCart = prevCart.map(
-        (c) =>
-          c.projectId === item.projectId // If the item is already in the cart,
-            ? { ...c, donationAmount: c.donationAmount + item.donationAmount } // update its donation amount.
-            : c // Otherwise, keep the current item as is.
-      );
-
-      // If the item already exists, return the updated cart; otherwise, add the new item to the cart.
-      // If `existingItem` is found, we return `updatedCart`; if not, we append the new item to the cart.
-      return existingItem ? updatedCart : [...prevCart, item];
+      if (existingItem) {
+        const updatedCart = prevCart.map(
+          (c) =>
+            c.projectId === item.projectId // If the item is already in the cart,
+              ? { ...c, donationAmount: c.donationAmount + item.donationAmount } // update its donation amount.
+              : c // Otherwise, keep the current item as is.
+        );
+        return updatedCart;
+      } else {
+        //  If not, we append the new item to the cart.
+        return existingItem ? updatedCart : [...prevCart, item];
+      }
     });
   };
 
