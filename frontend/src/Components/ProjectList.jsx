@@ -1,46 +1,39 @@
 import { useEffect, useState } from "react";
 import Project from "../../types/Project";
 import { useNavigate } from "react-router-dom";
+import { fetchProjects } from "../api/ProjectsAPI";
 
 function ProjectList({ selectedCategories }) {
   const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
   const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
   const [pageNum, setPageNum] = useState(1); //set default pagenumber to 1
-  const [totalItems, setTotalItems] = useState(0); //total items default is 0
   const [totalPages, setTotalPages] = useState(0); //total number of pages
   const navigate = useNavigate(); //imported from react router dom to change pages
+  const [error, setError] = useState(null); //look for errors, default null
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     //goes and grabs the data when we need to. Only looks for changes in the dom, not the server
-    const fetchProjects = async () => {
-      const categoryParams = selectedCategories
-        .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
-        .join("&"); //encodeURIComponent makes sure our data is put together correctly
-      const response = await fetch(
-        `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ``}` //using ` (on the tilda key) will allow us to grab the variable (indicated by the $ in the link) from our page size we selected and pass it to the server,
-        //if we have selected categories, append the categoryParameters to the end, else leave it blank (add nothing)
-      ); //goes and fetches the table. the "?" indicates additional information such as page size
-      const data = await response.json(); //returns the data in the .json
-      console.log("Fetched data:", data); //log the fetch data for debugging purposes
-      const projectObjects = data.projects.map(
-        //this maps out our array of projects to display
-        (item) =>
-          new Project(
-            item.projectId,
-            item.projectName,
-            item.projectType,
-            item.projectRegionalProgram,
-            item.projectImpact,
-            item.projectPhase,
-            item.projectFunctionalityStatus
-          )
-      );
-      setProjects(projectObjects); //setting our projects list to display
-      setTotalItems(data.totalNumProjects); //getting our total number of projects
+    const loadProjects = async () => {
+      
+      try{
+        setLoading(true);
+        const data = await fetchProjects(pageSize, pageNum, selectedCategories);
+
+      setProjects(data.projects); //setting our projects list to display
       setTotalPages(Math.ceil(data.totalNumProjects / pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
+      }
+      catch(error){
+        setError((error).message);
+      }finally{
+        setLoading(false);
+      }
     };
-    fetchProjects();
-  }, [pageSize, pageNum, totalItems, selectedCategories]); //[pageSize] & [pageNum] updates as we change the page size selection box
+    loadProjects();
+  }, [pageSize, pageNum, selectedCategories]); //[pageSize] & [pageNum] updates as we change the page size selection box
+
+  if(loading) return <p>Loading Projects...</p>
+  if (error) return <p className ='text-red-500'>Error: {error}</p>
 
   return (
     <>
