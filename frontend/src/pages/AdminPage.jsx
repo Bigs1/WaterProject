@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Project from "../../types/Project";
 import { fetchProjects } from "../api/ProjectsAPI";
-
+import Pagination from "../Components/pagination";
+import NewProjectForm from "../Components/NewProjectForm";
+import EditProjectForm from "../Components/EditProjectForm";
 
 //this page will look similar to the projects page in code, the difference on the frontend is that it will have more details and options as well as the projects will be laid out in a table with more functions such as
 // adding and deleting data entries
@@ -16,12 +17,15 @@ const AdminProjectPage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [error, setError] = useState(null); //look for errors, default null
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false); //flag when to show form
+  const [editingProject, setEditingProject] = useState(null); //flag when editing project
 
   useEffect(() => {
     const loadProjects = async () => {
       try {
         const data = await fetchProjects(pageSize, pageNum, selectedCategories);
         setProjects(data.projects);
+        setTotalPages(Math.ceil(data.totalNumProjects / pageSize));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -38,8 +42,43 @@ const AdminProjectPage = () => {
   return (
     <div>
       <h1>Admin - Projects</h1>
-      <table>
-        <thead>
+
+      {!showForm && (
+        <button
+          className="btn btn-success mb-3"
+          onClick={() => setShowForm(true)}
+        >
+          Add Project
+        </button>
+      )}
+
+      {showForm && (
+        <NewProjectForm
+          onSuccess={() => {
+            setShowForm(false);
+            fetchProjects(pageSize, pageNum, []).then((data) => {
+              setProjects(data.projects);
+            });
+          }}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
+
+      {editingProject && (
+        <EditProjectForm
+          project={editingProject}
+          onSuccess={() => {
+            setEditingProject(null);
+            fetchProjects(pageSize, pageNum, []).then((data) =>
+              setProjects(data.projects)
+            );
+          }}
+          onCancel={() => setEditingProject(null)}
+        />
+      )}
+
+      <table className="table table-bordered table-striped">
+        <thead className="table-dark">
           <tr>
             <th>ID</th>
             <th>Name</th>
@@ -48,6 +87,7 @@ const AdminProjectPage = () => {
             <th>Impact</th>
             <th>Phase</th>
             <th>Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -62,11 +102,13 @@ const AdminProjectPage = () => {
               <td>{p.projectFunctionalityStatus}</td>
               <td>
                 <button
+                  className="btn btn-primary btn-sm w-100 mb-1"
                   onClick={() => console.log(`Edit project ${p.projectId}`)}
                 >
                   Edit
                 </button>
                 <button
+                  className="btn btn-danger btn-sm w-100"
                   onClick={() => console.log(`Edit project ${p.projectId}`)}
                 >
                   Delete
@@ -76,6 +118,16 @@ const AdminProjectPage = () => {
           ))}
         </tbody>
       </table>
+      <Pagination
+        currentPage={pageNum}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPageNum}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPageNum(1);
+        }}
+      />
     </div>
   );
 };

@@ -1,16 +1,17 @@
 import Project from "../../types/Project";
 
+const API_URL = "https://localhost:5000/Water";
+
 export const fetchProjects = async (
   pageSize,
   pageNum,
-  selectedCategories
+  selectedCategories = [] //ensures items are returned as an array
 ) => {
   try {
     const categoryParams = selectedCategories
       .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
       .join("&");
-
-    const url = `https://localhost:5000/Water/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}${
+    const url = `${API_URL}/AllProjects?pageHowMany=${pageSize}&pageNumber=${pageNum}${
       selectedCategories.length ? `&${categoryParams}` : ""
     }`;
 
@@ -42,6 +43,48 @@ export const fetchProjects = async (
     };
   } catch (error) {
     console.error("Error fetching projects:", error);
+    throw error;
+  }
+};
+
+export const addProject = async (newProject) => {
+  try {
+    const response = await fetch(`${API_URL}/AddProject`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProject),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add project");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding project", error);
+    throw error;
+  }
+};
+
+export const updateProject = async (projectId, updatedProject) => {
+  try {
+    const response = await fetch(`${API_URL}/UpdateProject/${projectId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProject),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update project");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating project", error);
     throw error;
   }
 };

@@ -14,12 +14,12 @@ namespace WaterProject.Controllers
         public WaterController(WaterDbContext temp) => _waterContext = temp; //constructor builds at startup and can set a waterContext variable to be used between methods.
                                                                              //This can be done in an inline statement like so
         [HttpGet("AllProjects")]//route, is routing
-        public IActionResult GetProjects(int pageHowMany = 5, int pageNumber = 1, [FromQuery] List<string> ? projectTypes = null) //goes to the database,getting how many selected projects we want to display, default value of 5.
-                                                                                                                                  //We also get our project type/category request with a default of null if we dont have anything
+        public IActionResult GetProjects(int pageHowMany = 5, int pageNumber = 1, [FromQuery] List<string>? projectTypes = null) //goes to the database,getting how many selected projects we want to display, default value of 5.
+                                                                                                                                 //We also get our project type/category request with a default of null if we dont have anything
         {
             var query = _waterContext.Projects.AsQueryable(); //builds a query
 
-            if(projectTypes != null && projectTypes.Any())
+            if (projectTypes != null && projectTypes.Any())
             {
                 query = query.Where(p => projectTypes.Contains(p.ProjectType));
             }
@@ -65,11 +65,54 @@ namespace WaterProject.Controllers
         [HttpGet("GetProjectTypes")]
         public IActionResult GetProjectTypes()
         {
-           var projectTypes = _waterContext.Projects
-                .Select(p => p.ProjectType)
-                .Distinct()
-                .ToList();
-           return Ok(projectTypes);
+            var projectTypes = _waterContext.Projects
+                 .Select(p => p.ProjectType)
+                 .Distinct()
+                 .ToList();
+            return Ok(projectTypes);
+        }
+
+        [HttpPost("AddProject")]
+        public IActionResult AddProject([FromBody] Project newProject) //[Frombody] tag specifies that a parameter or property should be bound using the request body. So it makes it using the Project Constructor layout
+        {
+            _waterContext.Projects.Add(newProject); //adds the new project
+            _waterContext.SaveChanges(); //saves the changes in the water context file to the database
+            return Ok(newProject); //return ok with the new project in case we need to to be used on  the other side
+        }
+
+        [HttpPut("UpdateProject/{projectId}")]
+        public IActionResult UpdateProject(int projectId, [FromBody] Project updatedProject)
+        {
+            var existingProject = _waterContext.Projects.Find(projectId); //find the existing project first
+
+            //go through and update the existing project with the new project data
+            existingProject.ProjectName = updatedProject.ProjectName;
+            existingProject.ProjectType = updatedProject.ProjectType;
+            existingProject.ProjectRegionalProgram = updatedProject.ProjectRegionalProgram;
+            existingProject.ProjectImpact = updatedProject.ProjectImpact;
+            existingProject.ProjectPhase = updatedProject.ProjectPhase;
+            existingProject.ProjectFunctionalityStatus = updatedProject.ProjectFunctionalityStatus;
+
+            _waterContext.Projects.Update(existingProject); //update the entry in the database
+            _waterContext.SaveChanges(); //save the changes
+
+            return Ok(existingProject); //return ok with the project in case we need it later
+        }
+
+        [HttpDelete("DeleteProject/{projectId}")]
+        public IActionResult DeleteProject(int projectId)
+        {
+            var project = _waterContext.Projects.Find(projectId); //find the project
+
+            if (project == null) //if its not found
+            {
+                return NotFound(new { message = "Project Not Found" }); //return that we didnt find the object
+            }
+
+            _waterContext.Projects.Remove(project); //if its there remove it
+            _waterContext.SaveChanges(); //save the changes in the database
+
+            return NoContent(); // return nothing (empty object)
         }
     }
 }
