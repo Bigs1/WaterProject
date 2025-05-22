@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { updateProject } from "../api/ProjectsAPI"; // Make sure this function exists and is correctly imported
 
-
+//Form to edit the data of all projects functions similarly to addProjects except we update the project overriding the data.
 const EditProjectForm = ({ project, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState(
     {...project},
@@ -16,19 +16,20 @@ const EditProjectForm = ({ project, onSuccess, onCancel }) => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); //set form data
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //prevent the default data from taking over above
     try {
-      await updateProject(formData.projectId, formData);
+      await updateProject(formData.projectId, formData); //update the project data and the form data to reflect these changes
       onSuccess();
     } catch (err) {
       console.error("Failed to add project:", err);
     }
   };
 
+  //show the form
   return (
     <form onSubmit={handleSubmit}>
       <h2>Add New Project</h2>

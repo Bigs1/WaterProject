@@ -2,7 +2,7 @@ import { useState } from "react";
 import { addProject } from "../api/ProjectsAPI"; // Make sure this function exists and is correctly imported
 
 
-const NewProjectForm = ({ onSuccess, onCancel }) => {
+const NewProjectForm = ({ onSuccess, onCancel }) => { //our form data will look like this with all the project components
   const [formData, setFormData] = useState({
     projectId: 0,
     projectName: '',
@@ -14,19 +14,20 @@ const NewProjectForm = ({ onSuccess, onCancel }) => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); //set form data with the corresponding information we input
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //we dont want to upload default values
     try {
-      await addProject(formData);
-      onSuccess();
+      await addProject(formData); //add the project  with the formdata we added
+      onSuccess(); //flag successful added entry
     } catch (err) {
       console.error("Failed to add project:", err);
     }
   };
 
+  //fields to add the data into
   return (
     <form onSubmit={handleSubmit}>
       <h2>Add New Project</h2>

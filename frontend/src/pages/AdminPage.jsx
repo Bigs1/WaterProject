@@ -38,12 +38,12 @@ const AdminProjectPage = () => {
 
   //HANDLING DELETE HERE!
   const handleDelete = async(projectId) =>{
-    const confirmDelete = window.confirm('Are you sure you want to delete this project?');
-    if(!confirmDelete) return;
+    const confirmDelete = window.confirm('Are you sure you want to delete this project?'); //confirm the deletion (pops open a window)
+    if(!confirmDelete) return; //just return if we cancel
 
     try{
-      await deleteProject(projectId);
-      setProjects(projects.filter((p) => p.projectId !== projectId))
+      await deleteProject(projectId); //get the project ID
+      setProjects(projects.filter((p) => p.projectId !== projectId)) //filter the list showing all projects except the one we want to delete and set that list to current list to remove the entry
     }
     catch(error){
       alert('Failed to delete project. Please try again.')
