@@ -47,6 +47,7 @@ export const fetchProjects = async (
   }
 };
 
+//BELOW IS THE API OPERATION CALLS THIS IS WHAT MAKES THE CALL TO MODIFY THE DATA IN THE BACKEND
 export const addProject = async (newProject) => {
   try {
     const response = await fetch(`${API_URL}/AddProject`, {
@@ -58,6 +59,8 @@ export const addProject = async (newProject) => {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Failed to add project:", errorText);
       throw new Error("Failed to add project");
     }
 
@@ -83,6 +86,20 @@ export const updateProject = async (projectId, updatedProject) => {
     }
 
     return await response.json();
+  } catch (error) {
+    console.error("Error updating project", error);
+    throw error;
+  }
+};
+
+export const deleteProject = async (projectId) => {
+  try {
+    const response = await fetch(`${API_URL}/DeleteProject/${projectId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete project");
+    }
   } catch (error) {
     console.error("Error updating project", error);
     throw error;

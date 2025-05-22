@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchProjects } from "../api/ProjectsAPI";
+import { deleteProject, fetchProjects } from "../api/ProjectsAPI";
 import Pagination from "../Components/pagination";
 import NewProjectForm from "../Components/NewProjectForm";
 import EditProjectForm from "../Components/EditProjectForm";
@@ -36,9 +36,25 @@ const AdminProjectPage = () => {
     loadProjects();
   }, [pageSize, pageNum, selectedCategories]);
 
+  //HANDLING DELETE HERE!
+  const handleDelete = async(projectId) =>{
+    const confirmDelete = window.confirm('Are you sure you want to delete this project?');
+    if(!confirmDelete) return;
+
+    try{
+      await deleteProject(projectId);
+      setProjects(projects.filter((p) => p.projectId !== projectId))
+    }
+    catch(error){
+      alert('Failed to delete project. Please try again.')
+    }
+  }
+
   if (loading) return <p>Loading Projects...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
+  //If we are not showing the form to add a project, display the button, if we hit the button, then display the form to add a project. Also adds functionality to the edit and delete buttons.
+  //If the object to edit is not null then we render the edit Project forum component
   return (
     <div>
       <h1>Admin - Projects</h1>
@@ -103,13 +119,13 @@ const AdminProjectPage = () => {
               <td>
                 <button
                   className="btn btn-primary btn-sm w-100 mb-1"
-                  onClick={() => console.log(`Edit project ${p.projectId}`)}
+                  onClick={() => setEditingProject(p)}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger btn-sm w-100"
-                  onClick={() => console.log(`Edit project ${p.projectId}`)}
+                  onClick={() => handleDelete(p.projectId)}
                 >
                   Delete
                 </button>

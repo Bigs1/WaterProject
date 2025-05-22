@@ -102,17 +102,20 @@ namespace WaterProject.Controllers
         [HttpDelete("DeleteProject/{projectId}")]
         public IActionResult DeleteProject(int projectId)
         {
-            var project = _waterContext.Projects.Find(projectId); //find the project
+            Console.WriteLine($"Attempting to delete project {projectId}");
 
-            if (project == null) //if its not found
+            var project = _waterContext.Projects.Find(projectId);
+            if (project == null)
             {
-                return NotFound(new { message = "Project Not Found" }); //return that we didnt find the object
+                Console.WriteLine($"Project {projectId} not found.");
+                return NotFound(new { message = "Project Not Found" });
             }
 
-            _waterContext.Projects.Remove(project); //if its there remove it
-            _waterContext.SaveChanges(); //save the changes in the database
+            _waterContext.Projects.Remove(project);
+            _waterContext.SaveChanges();
 
-            return NoContent(); // return nothing (empty object)
+            Console.WriteLine($"Project {projectId} deleted.");
+            return NoContent();
         }
     }
 }

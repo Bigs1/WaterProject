@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\waterproject\\WaterProject.csproj": {}
+    "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\WaterProject\\WaterProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\waterproject\\WaterProject.csproj": {
+    "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\WaterProject\\WaterProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\waterproject\\WaterProject.csproj",
+        "projectUniqueName": "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\WaterProject\\WaterProject.csproj",
         "projectName": "WaterProject",
-        "projectPath": "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\waterproject\\WaterProject.csproj",
+        "projectPath": "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\WaterProject\\WaterProject.csproj",
         "packagesPath": "C:\\Users\\Arno0\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\waterproject\\obj\\",
+        "outputPath": "C:\\Users\\Arno0\\Documents\\VS_Code_projects\\WaterProject\\backend\\WaterProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

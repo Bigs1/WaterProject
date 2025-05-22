@@ -93,7 +93,7 @@ const EditProjectForm = ({ project, onSuccess, onCancel }) => {
         />
       </label>
 
-      <button type="submit">Add Project</button>
+      <button type="submit">Update Project</button>
       <button type="button" onClick={onCancel}>Cancel</button>
     </form>
   );
