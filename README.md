@@ -13,5 +13,5 @@ cd backend <-- move into the backend folder
 cd WaterProject <-- move into the backend where the data and files are
 dotnet watch run <-- runs the local server (hosted by your machine) so that the frontend can get data and any changes (you) made in the code will automatically be updated and reflected
 
-Frontend languages and framework: React, Javascript
+Frontend languages and framework: React, Javascript, Bootstrap
 Backend languages and framework: C#, .Net, Sqlite
