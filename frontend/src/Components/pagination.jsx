@@ -8,7 +8,7 @@ const Pagination = ({ currentPage, totalPages, pageSize, onPageChange, onPageSiz
         Previous
       </button>
 
-      {[...Array(totalPages)].map((_, i) => (
+      {[...Array(totalPages)].map((_, i) => ( //mapping out the buttons to display page numbers
         <button
           key={i + 1}
           onClick={() => onPageChange(i + 1)}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchProjects } from "../api/ProjectsAPI";
 import Pagination from "./pagination";
 
-function ProjectList({selectedCategories}) {
+function ProjectList({selectedCategories, searchInput}) {
   const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
   const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
   const [pageNum, setPageNum] = useState(1); //set default pagenumber to 1
@@ -33,9 +33,20 @@ function ProjectList({selectedCategories}) {
   if (loading) return <p>Loading Projects...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
+  const filteredProjects = projects.filter((p) => { //filtering the list of projects if they contain the following: (this is client side)
+  const filteredCategory = //
+    selectedCategories.length === 0 || //display all if we dont have a selected category, or only if the selected category is included in the project type field
+    selectedCategories.includes(p.projectType);
+
+  const filteredSearch =
+    !searchInput || p.projectName.toLowerCase().includes(searchInput.toLowerCase()); //set matches search to whatever we input in the searchbar, or leave it blank if we don't have an input
+
+  return filteredCategory && filteredSearch; //return both the category filter and the search filter
+});
+
   return (
     <>
-      {projects.map((p) => (
+      {filteredProjects.map((p) => (
         <div key={p.projectId} id="projectCard" className="card">
           <h3 className="card-title">{p.projectName}</h3>
           <div className="card-body">
