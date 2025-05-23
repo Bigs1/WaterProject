@@ -1,3 +1,4 @@
+/*
 import { useEffect, useState } from "react";
 import Project from "../types/Project"
 
@@ -48,4 +49,5 @@ function ProjectList(){
     );
 }
 
-export default ProjectList;
+export default ProjectList; 
+*/

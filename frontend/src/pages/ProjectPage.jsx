@@ -4,12 +4,22 @@ import CategoryFilter from "../Components/CategoryFilter";
 import Header from "../Components/Header";
 import "./ProjectPage.css";
 import CartSummary from "../Components/CartSummary";
+import { useNavigate } from "react-router-dom";
 
 function ProjectsPage() {
   const [count, setCount] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const navigate = useNavigate(); //imported from react router dom to change pages
   return (
     <>
+    <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000 }}>
+    <button className="btn btn-outline-info btn-sm"
+              onClick={() =>
+                navigate(`/admin`)
+              }>
+      Admin
+    </button>
+    </div>
       <div className="container mt-4">
         <CartSummary/>
         <Header />

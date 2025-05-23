@@ -37,18 +37,19 @@ const AdminProjectPage = () => {
   }, [pageSize, pageNum, selectedCategories]);
 
   //HANDLING DELETE HERE!
-  const handleDelete = async(projectId) =>{
-    const confirmDelete = window.confirm('Are you sure you want to delete this project?'); //confirm the deletion (pops open a window)
-    if(!confirmDelete) return; //just return if we cancel
+  const handleDelete = async (projectId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this project?"
+    ); //confirm the deletion (pops open a window)
+    if (!confirmDelete) return; //just return if we cancel
 
-    try{
+    try {
       await deleteProject(projectId); //get the project ID
-      setProjects(projects.filter((p) => p.projectId !== projectId)) //filter the list showing all projects except the one we want to delete and set that list to current list to remove the entry
+      setProjects(projects.filter((p) => p.projectId !== projectId)); //filter the list showing all projects except the one we want to delete and set that list to current list to remove the entry
+    } catch (error) {
+      alert("Failed to delete project. Please try again.");
     }
-    catch(error){
-      alert('Failed to delete project. Please try again.')
-    }
-  }
+  };
 
   if (loading) return <p>Loading Projects...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -57,6 +58,21 @@ const AdminProjectPage = () => {
   //If the object to edit is not null then we render the edit Project forum component
   return (
     <div>
+      <div
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          zIndex: 1000,
+        }}
+      >
+        <button
+          className="btn btn-outline-info btn-sm"
+          onClick={() => navigate(`/projects`)}
+        >
+          User
+        </button>
+      </div>
       <h1>Admin - Projects</h1>
 
       {!showForm && (

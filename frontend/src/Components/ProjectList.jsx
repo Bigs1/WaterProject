@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchProjects } from "../api/ProjectsAPI";
 import Pagination from "./pagination";
 
-function ProjectList() {
+function ProjectList({selectedCategories}) {
   const [projects, setProjects] = useState([]); //default is blank array, and then end up with Project Array
   const [pageSize, setPageSize] = useState(10); //sets default page size and allows us to retain what the page size was set to when a page has been switched
   const [pageNum, setPageNum] = useState(1); //set default pagenumber to 1
@@ -17,7 +17,7 @@ function ProjectList() {
     const loadProjects = async () => {
       try {
         setLoading(true);
-        const data = await fetchProjects(pageSize, pageNum);
+        const data = await fetchProjects(pageSize, pageNum, selectedCategories);
 
         setProjects(data.projects); //setting our projects list to display
         setTotalPages(Math.ceil(data.totalNumProjects / pageSize)); //getting hte total number of pages we need by dividing the number of items by the page size and raise it to the next whole number with Math.ceil so 20 items / 5 pageSize (items per page) = 4 pages
@@ -28,7 +28,7 @@ function ProjectList() {
       }
     };
     loadProjects();
-  }, [pageSize, pageNum]); //[pageSize] & [pageNum] updates as we change the page size selection box
+  }, [pageSize, pageNum, selectedCategories]); //[pageSize] & [pageNum] updates as we change the page size selection box
 
   if (loading) return <p>Loading Projects...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
