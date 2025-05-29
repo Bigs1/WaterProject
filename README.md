@@ -5,6 +5,7 @@ No nothing goes over the internet to do anything, all data and functionality hap
 For the frontend:
 (assuming you are in the WaterProjects folder)
 cd frontend <-- this will take you to the frontend folder
+npm install vite <-- installs the vite package for the file structure
 npm run dev <-- this will start the locally hosted webpage
 *Frontend Done*
 
